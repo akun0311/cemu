@@ -95,8 +95,8 @@ private:
                 break;
             }
             case OPCODE_JALR: {
-                if (inst->i_type.imm12 & 1) inst->i_type.imm12 ^= 1;
                 uint64_t npc = GPR[inst->i_type.rs1] + inst->i_type.imm12;
+                if (npc & 1) npc ^= 1;
                 if (npc % PC_ALIGN) priv.raise_trap(csr_cause_def(exc_instr_misalign),npc);
                 else {
                     set_GPR(inst->j_type.rd,pc + 4);
